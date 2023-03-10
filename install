@@ -1,0 +1,57 @@
+#!/bin/sh
+top_dir=`pwd`
+
+# install apt-get package
+install_list="
+npm
+python-pip
+ctags
+bear
+expect
+"
+sudo apt-get update
+for x in $install_list
+do
+	echo "=========install $x==========="
+	sudo apt-get install $x -y
+done
+
+# install special package
+sudo npm i -g pyright
+sudo pip install pygments -y
+
+# install custom package
+## install gtags
+echo "============install gtags============"
+cd gtags/ && ./install
+cd $top_dir
+
+## install fzf
+echo "============install fzf ============"
+cd nvim/plugged/fzf
+expect <<EOF  
+    set timeout 10 
+    spawn ./install 
+    expect "enable fuzzy auto-completion" { send "y\r" }
+    expect "enable key bindings" { send "y\r" } 
+    expect "update your shell configuration files" { send "y\r" }
+    expect eof
+EOF
+cd $top_dir
+
+
+# install config
+cat>>~/.bashrc<<EOF
+alias nv='nvim'
+alias tmux="TERM=screen-256color-bce tmux"
+
+export PYTHONDONTWRITEBYTECODE=1
+export PATH=~/.config/nvim/bin:\$PATH
+export PATH=~/bin/gtags/bin:\$PATH
+EOF
+
+cat>>~/.tmux.conf<<EOF
+set -g default-terminal "screen-256color"
+set -g mouse on
+EOF
+

@@ -1,0 +1,42 @@
+#!/bin/sh
+# install depends
+sudo apt-get install python-pip
+sudo pip install pygments
+sudo apt-get install libncurses5-dev
+
+set -x
+# clean
+gtags_prefix=~/bin/gtags
+rm -rf $gtags_prefix
+rm -rf global-6.6.8
+
+# install gtags
+mkdir -p $gtags_prefix
+cd $gtags_prefix
+gtags_prefix=`pwd`
+cd -
+
+gtags_data="$gtags_prefix/data"
+mkdir -p $gtags_data
+
+tar -xzvf global-6.6.8.tar.gz
+cd global-6.6.8/
+./configure --prefix=$gtags_prefix --datadir=$gtags_data
+make && make install
+cd - && rm -rf global-6.6.8
+
+# install env
+gtags_conf=$gtags_data/gtags/gtags.conf
+cat >> ~/.bashrc << EOF
+export GTAGSCONF=${gtags_conf}
+export GTAGSLABEL=pygments
+EOF
+
+init_vim=$(dirname `pwd`)/init.vim
+(
+cat << EOF
+let \$GTAGSCONF = '${gtags_conf}'
+let \$GTAGSLABEL = 'pygments'
+EOF
+) >> $init_vim
+
