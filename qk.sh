@@ -5,3 +5,7 @@ qjy_get_content() {
 	rm subtitles.txt.tmp
 	echo "end=========================="
 }
+
+qtag(){
+    find `pwd` -name "*.c" -o -name "*.h" > ls.files && cscope -Rbkq -i ls.files && ctags -R
+}
