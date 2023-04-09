@@ -49,6 +49,9 @@ Plug 'rebelot/kanagawa.nvim'
 " markdown table 
 Plug 'dhruvasagar/vim-table-mode'
 
+" ALE
+Plug 'dense-analysis/ale'
+
 call plug#end()
 " 通用配置 ============================
 let mapleader=";"
