@@ -240,3 +240,7 @@ nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 "<leader>tdc: 删除列
 "<leader>tic: 插入列
 "单元格移动:[|, ]|, {|, }|
+
+"dense-analysis/ale
+nmap <silent> <Leader>wj <Plug>(ale_previous_wrap)
+nmap <silent> <Leader>wk <Plug>(ale_next_wrap)
